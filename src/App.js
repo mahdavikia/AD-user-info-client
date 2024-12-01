@@ -1,25 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+// src/App.js  
+import React, { useEffect, useState } from 'react';  
+import axios from 'axios';  
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+function App() {  
+  const [user, setUser] = useState(null);  
+  const [error, setError] = useState(null);  
+
+  useEffect(() => {  
+    axios.get('http://localhost:5000/api/user')  
+      .then(response => {  
+        setUser(response.data);  
+      })  
+      .catch(err => {  
+        setError(err);  
+      });  
+  }, []);  
+
+  return (  
+    <div>  
+      <h1>User Info</h1>  
+      {error && <p>Error fetching user info: {error.message}</p>}  
+      {user ? (  
+        <div>  
+          <p>Email: {user.username+'@example.com'}</p>       
+        </div>  
+      ) : (  
+        <p>Loading user info...</p>  
+      )}  
+    </div>  
+  );  
+}  
 
 export default App;
